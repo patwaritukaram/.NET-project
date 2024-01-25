@@ -1,0 +1,99 @@
+using System;
+        using System.Data.SqlClient;
+        using System.Windows.Forms;
+
+class Program
+{
+    static string connectionString = "Connection string";
+
+    static void Main()
+    {
+        // Task 1: Create Database
+        CreateDatabase();
+
+        // Task 2: Create Table Employee with Primary Key Constraint
+        CreateTable();
+
+        // Task 3: Print All Information
+        PrintAllInformation();
+
+        // Task 4: Perform CRUD Operations
+        // (Implement Insert, Update, Delete methods)
+
+        // Task 5: Update Information Using ID and Apply Validation
+        // (Implement Update method with validation)
+
+        // Task 6: Display Information in DataGridView
+        Application.EnableVisualStyles();
+        Application.SetCompatibleTextRenderingDefault(false);
+        Application.Run(new EmployeeForm());
+    }
+
+    static void CreateDatabase()
+    {
+        using (SqlConnection connection = new SqlConnection(connectionString))
+        {
+            connection.Open();
+
+            string createDatabaseQuery = "CREATE DATABASE tukaram";
+            using (SqlCommand command = new SqlCommand(createDatabaseQuery, connection))
+            {
+                command.ExecuteNonQuery();
+            }
+        }
+    }
+
+    static void CreateTable()
+    {
+        using (SqlConnection connection = new SqlConnection(connectionString))
+        {
+            connection.Open();
+
+            string createTableQuery = "CREATE TABLE Employee (Id INT PRIMARY KEY, Name NVARCHAR(50), Age INT)";
+            using (SqlCommand command = new SqlCommand(createTableQuery, connection))
+            {
+                command.ExecuteNonQuery();
+            }
+        }
+    }
+
+    static void PrintAllInformation()
+    {
+        using (SqlConnection connection = new SqlConnection(connectionString))
+        {
+            connection.Open();
+
+            string selectQuery = "SELECT * FROM Employee";
+            using (SqlCommand command = new SqlCommand(selectQuery, connection))
+            {
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        Console.WriteLine($"{reader["Id"]}, {reader["Name"]}, {reader["Age"]}");
+                    }
+                }
+            }
+        }
+    }
+}
+
+public class EmployeeForm : Form
+        {
+// Task 6: Display Information in DataGridView
+private DataGridView dataGridView;
+
+public EmployeeForm()
+        {
+        InitializeComponent();
+        }
+
+private void InitializeComponent()
+        {
+        dataGridView = new DataGridView();
+        dataGridView.Dock = DockStyle.Fill;
+
+        Controls.Add(dataGridView);
+        }
+        }
+
